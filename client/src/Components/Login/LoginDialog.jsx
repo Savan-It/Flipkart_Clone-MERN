@@ -1,7 +1,11 @@
-import { React, useState } from 'react'
+import { React, useState, useContext } from 'react'
 import { Button, Dialog, TextField, Typography, styled, Box} from '@mui/material'
 
+//import context api
+import {DataContext} from '../../Context/DataProvider'
 
+// import service for signup and login post request 
+import {authenticateSignup, authenticateLogin} from '../../Service/api'
 const Container = styled(Box)`
   width: 100vh;
   height: 80vh;
@@ -70,7 +74,7 @@ const initialAccountvalues = {
 
 }
 
-const UserDataFormate = {
+const initialsignupvalues = {
   firstname:'',
   lastname:'',
   username:'',
@@ -78,14 +82,28 @@ const UserDataFormate = {
   phone:'',
 
 }
+
+const initialloginvalues = {
+  emailorphone:'',
+
+}
+
+
 function LoginDialog({ open, setOpen }) {
 
+  // useStates...
   const [account, toggleAccount] = useState(initialAccountvalues.login);
-  const [userdata, setUserdata] = useState(UserDataFormate);
+  const [userdata, setUserdata] = useState(initialsignupvalues);
+  const [loginData, setLoginData] = useState(initialloginvalues);
+  const [loginError, setLoginError] = useState(false)
   
-  const closeToggle = () => {
+  // use context api
+  const {setAccount} = useContext(DataContext);
+  
+  const cleseDialog = () => {
     setOpen(false);
     toggleAccount(initialAccountvalues.login);
+    setLoginError(false)
   }
 
   const openSignupDialog = () => {
@@ -99,11 +117,33 @@ function LoginDialog({ open, setOpen }) {
     setUserdata({...userdata,[e.target.name]: e.target.value}); 
   }
 
-  const handleSignupButton=()=>{
-    console.log(userdata);
+  
+  const saveLoginData = (e)=>{
+    setLoginData({...userdata,[e.target.name]: e.target.value}); 
   }
+
+  const handleSignupButton= async()=>{
+    let response = await authenticateSignup(userdata);
+    if(!response) return;
+    cleseDialog();
+    setAccount(userdata.firstname)
+  }
+  const handleLoginButton= async()=>{
+    let response = await authenticateLogin(loginData);
+    if(response.status === 200){
+      cleseDialog();
+      setAccount(response.data.message.firstname)
+    }
+    else{
+      setLoginError(true)  
+    }
+  }
+  
+
+
+
   return (
-    <Dialog open={open} onClose={closeToggle} PaperProps={{ sx: { maxWidth: "unset" } }}>
+    <Dialog open={open} onClose={cleseDialog} PaperProps={{ sx: { maxWidth: "unset" } }}>
       <Container>
         <Box style={{ display: "flex", height: "100%" }}>
           <Loginimage>
@@ -112,9 +152,10 @@ function LoginDialog({ open, setOpen }) {
           </Loginimage>
           {(account.view === 'login') ?
             <Wrapper>
-              <TextField label="Enter Email / Mobile number" variant='standard' InputLabelProps={{ style: { fontSize: 14}}} />
+              <TextField label="Enter Email / Mobile number" onChange={saveLoginData} name='emailorphone' variant='standard' InputLabelProps={{ style: { fontSize: 14}}} />
+              {loginError && <Typography style={{color:'red', fontSize: '12px'}}>Please enter valid email or phone number</Typography>}
               <Typography style={{ fontSize: "12px", fontWeight: "400", color: "#878787", marginTop: 20 }}>By continuing, you agree to Flipkart's Terms of Use and Privacy Policy.</Typography>
-              <RequestOtpButton>Request OTP</RequestOtpButton>
+              <RequestOtpButton onClick={handleLoginButton}>Request OTP</RequestOtpButton>
               <CreatAccount onClick={openSignupDialog}>New to Flipkart? Create an account</CreatAccount>
             </Wrapper> :
             <Wrapper>
