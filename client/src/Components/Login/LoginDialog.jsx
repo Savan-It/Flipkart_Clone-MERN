@@ -97,7 +97,7 @@ function LoginDialog({ open, setOpen }) {
   const [loginData, setLoginData] = useState(initialloginvalues);
   const [loginError, setLoginError] = useState(false)
   
-  // use context api for set user name
+  // use context api to set user FirstName for diplay in header part 
   const {setAccount} = useContext(DataContext);
   
   const cleseDialog = () => {
