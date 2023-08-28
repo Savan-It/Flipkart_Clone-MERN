@@ -38,7 +38,6 @@ function CustomButtons() {
 
     // use context api for user's username
     const {account, setAccount} = useContext(DataContext);
-    console.log(account);
     const openDialog = () => {
         setOpen(true)
     }
