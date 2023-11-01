@@ -20,10 +20,14 @@ const responsive = {
     }
   };
 
-const CarouselImgae = styled('img')`
-    width: 100%;
-    height: 280px;
-`
+const CarouselImgae = styled('img')( ( {theme} ) => ({
+    width: "100%",
+    height: 280,
+    [theme.breakpoints.down('md')]: {
+        objectFit: "cover",
+        height: 180,
+    }
+}));
 function Banner() {
   return (
     <Carousel
@@ -31,8 +35,8 @@ function Banner() {
     swipeable={false}
     draggable={false}
     infinite={true}
-    autoPlay={true}
-    autoPlaySpeed={2500}
+    autoPlay={true} 
+    autoPlaySpeed={3000}
     >
         {
             bannerData.map((data) => (
