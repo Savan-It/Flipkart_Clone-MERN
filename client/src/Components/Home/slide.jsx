@@ -1,8 +1,9 @@
 import React from 'react';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { Box, Typography, Button, Divider,  styled } from '@mui/material';
+import { Box, Typography, Button, Divider, styled } from '@mui/material';
 import Countdown from 'react-countdown';
+import { Link } from 'react-router-dom';
 
 const responsive = {
     desktop: {
@@ -59,10 +60,10 @@ const Slide = ({ products, title }) => {
 
     return (
         <Box style={{ marginTop: "10px", backgroundColor: "#FFF" }}>
-            <Box style={{ padding: "15px 20px", display: "flex"}}>
+            <Box style={{ padding: "15px 20px", display: "flex" }}>
                 <DealText>{title}</DealText>
-                { title==='Deal of the Day' &&<Timer>
-                    <img src={timerURL} alt='timer' style={{width: 24}} />
+                {title === 'Deal of the Day' && <Timer>
+                    <img src={timerURL} alt='timer' style={{ width: 24 }} />
                     <Countdown date={Date.now() + 5.04e+7} renderer={renderer} />
                 </Timer>
                 }
@@ -76,19 +77,20 @@ const Slide = ({ products, title }) => {
                 infinite={true}
                 autoPlay={true}
                 autoPlaySpeed={3000}
-        centerMode={true}
-                
+                centerMode={true}
+
             >
                 {
                     products.map((product) => {
                         return (
-                            <Box key={product._id} textAlign="center" style={{padding:"25px 15px"}}>
-                                <Image src={product.url} alt={product.title} />
-                                <Text style={{ fontWeight: 600, color: "#212121"}}  >{product.title.shortTitle}</Text>
-                                <Text style={{ color: "green" }}> {product.discount}  </Text>
-                                <Text style={{ color: "#212121", opacity: ".6" }} > {product.tagline} </Text>
-
-                            </Box>
+                            <Link key={product._id} to={`details/${product.id}`} style={{ textDecoration: "none" }}>
+                                <Box  textAlign="center" style={{ padding: "25px 15px" }}>
+                                    <Image src={product.url} alt={product.title} />
+                                    <Text style={{ fontWeight: 600, color: "#212121" }}  >{product.title.shortTitle}</Text>
+                                    <Text style={{ color: "green" }}> {product.discount}  </Text>
+                                    <Text style={{ color: "#212121", opacity: ".6" }} > {product.tagline} </Text>
+                                </Box>
+                            </Link>
                         )
                     })
                 }
