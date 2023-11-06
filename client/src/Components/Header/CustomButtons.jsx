@@ -9,14 +9,31 @@ import { DataContext } from '../../Context/DataProvider'
 import LoginDialog from '../Login/LoginDialog';
 import Profile from './Profile'
 
-const ButtonContainer = styled(Box)`
-    display: flex;
-    align-items: center;
-    & > button, & > p, & > div{
-        margin-right: 30px;
-        font-size: 16px;
-    }
-`
+const ButtonContainer = styled(Box)(({ theme }) => ({
+    
+    
+    display: "flex",
+    alignItems: "center",
+    '& > button, & > p, & > div' :{
+        marginRight: 30,
+        fontSize: 16,
+    },
+
+        [theme.breakpoints.down('md')]: {
+            flexDirection: "column",
+            alignItems: "center",
+            '& > button, & > p, & > div' :{
+                margin: "10px 0",
+            },
+        }
+}));
+    
+const Container = styled(Box)(({ theme }) => ({
+    display: "flex",
+    // [theme.breakpoints.down('md')]: {
+    //     flexDirection: "column",
+    // }
+}));
 
 const LoginButton = styled(Button)`
     color: #2874F0;
@@ -27,6 +44,7 @@ const LoginButton = styled(Button)`
     text-transform: none;
     box-shadow: none;
     height: 32px;
+    margin-left: 20px;
     &:hover{
         background: #FFFFFF;
         box-shadow: none
@@ -49,10 +67,10 @@ function CustomButtons() {
             }
             <Typography style={{ marginTop: 3, width: 135 }}>Become a Sellar</Typography>
             <Typography style={{ marginTop: 3 }}>More</Typography>
-            <Box style={{ display: "flex" }}>
+            <Container >
                 <ShoppingCart />
                 <Typography>Cart</Typography>
-            </Box>
+            </Container>
             <LoginDialog open={open} setOpen={setOpen} />
         </ButtonContainer>
     )

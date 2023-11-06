@@ -83,7 +83,7 @@ const Slide = ({ products, title }) => {
                 {
                     products.map((product) => {
                         return (
-                            <Link key={product._id} to={`details/${product.id}`} style={{ textDecoration: "none" }}>
+                            <Link key={product._id} to={`product/${product.id}`} style={{ textDecoration: "none" }}>
                                 <Box  textAlign="center" style={{ padding: "25px 15px" }}>
                                     <Image src={product.url} alt={product.title} />
                                     <Text style={{ fontWeight: 600, color: "#212121" }}  >{product.title.shortTitle}</Text>

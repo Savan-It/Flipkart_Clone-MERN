@@ -1,6 +1,6 @@
-import React from 'react'
-import { AppBar, Box, Toolbar, Typography, styled } from '@mui/material'
-
+import React, { useState } from 'react'
+import { AppBar, Box, Toolbar, Typography, IconButton, Drawer, List, ListItem, styled } from '@mui/material'
+import { Menu } from '@mui/icons-material';
 // import Components
 import Search from './Search';
 import CustomButtons from './CustomButtons';
@@ -17,26 +17,64 @@ const Component = styled(Link)`
     color: inherit;
 `
 
+const CustomButtonWrapper = styled(Box)(({ theme }) => ({
+    margin: "0 5% 0 auto",
+    [theme.breakpoints.down('md')]: {
+        display: "none",
+    }
+}))
+
+const MenuButton = styled(IconButton)(({ theme }) => ({
+    display: "none",
+    [theme.breakpoints.down('md')]: {
+        display: "block",
+    }
+}))
+
 function Header() {
     const logoURL = 'https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/flipkart-plus_8d85f4.png';
     const subURL = 'https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/plus_aef861.png';
 
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => {
+        setOpen(true)
+    }
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const list = () => (
+        <Box >
+            <List>
+                <ListItem button >
+                    <CustomButtons />
+                </ListItem>
+            </List>
+        </Box>
+    );
     return (
         <StyledHeader>
             <Toolbar style={{ minHeight: "55px" }}>
-                    <Component  to='/'>
-                        <img src={logoURL} alt='logo' style={{ width: "75px" }} />
-                        <Box>
-                            <Typography style={{ fontSize: "10px", fontStyle: "italic" }}>Explore&nbsp;
-                                <Box component={'span'} style={{ color: '#FFE500' }}>Plus</Box>
-                                <img src={subURL} alt='sub-logo' style={{ width: 10, height: 10, marginLeft: 4 }} />
-                            </Typography>
-                        </Box>
-                    </Component>
+                <MenuButton color="inherit" onClick={handleOpen}>
+                    <Menu />
+                </MenuButton>
+                <Drawer anchor='left' open={open} onClose={handleClose} >
+                    {list() }
+                    </Drawer>
+                <Component to='/'>
+                    <img src={logoURL} alt='logo' style={{ width: "75px" }} />
+                    <Box>
+                        <Typography style={{ fontSize: "10px", fontStyle: "italic" }}>Explore&nbsp;
+                            <Box component={'span'} style={{ color: '#FFE500' }}>Plus</Box>
+                            <img src={subURL} alt='sub-logo' style={{ width: 10, height: 10, marginLeft: 4 }} />
+                        </Typography>
+                    </Box>
+                </Component>
                 <Search />
-                <Box style={{ margin: "0 5% 0 auto" }}>
+                <CustomButtonWrapper>
                     <CustomButtons />
-                </Box>
+                </CustomButtonWrapper>
             </Toolbar>
         </StyledHeader>
     )

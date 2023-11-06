@@ -17,7 +17,7 @@ function App() {
           <Routes>
 
             <Route path="/" element={<Home />} />
-            <Route path="/details/:id" element={<DetailView />} />
+            <Route path="/product/:id" element={<DetailView />} />
           </Routes>
         </Box>
     </DataProvider>
